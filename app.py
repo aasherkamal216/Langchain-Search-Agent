@@ -30,7 +30,7 @@ if "messages" not in st.session_state:
 
 for message in st.session_state.messages:
     st.chat_message(message['role']).write(message['content'])
-
+    
 if api_key:
     if prompt := st.chat_input("What is Generative AI?"):
         st.session_state.messages.append({"role": "user", "content": prompt})
@@ -40,7 +40,7 @@ if api_key:
         tools = [wiki_tool, arxiv_tool, search]
 
         search_agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
-                                        agent_kwargs={"handling_parsing_errors":True})
+                                        agent_executor_kwargs={"handle_parsing_errors": True})
         with st.chat_message("assistant"):
             st_callback = StreamlitCallbackHandler(st.container(), expand_new_thoughts=True)
             response = search_agent.run(st.session_state.messages, callbacks=[st_callback])
