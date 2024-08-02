@@ -8,10 +8,10 @@ from langchain.callbacks import StreamlitCallbackHandler
 dotenv.load_dotenv()
 
 ## Wikipedia Tool
-wiki_wrapper = WikipediaAPIWrapper(top_k_results=1, doc_content_chars_max=300)
+wiki_wrapper = WikipediaAPIWrapper(top_k_results=1, doc_content_chars_max=500)
 wiki_tool = WikipediaQueryRun(api_wrapper=wiki_wrapper)
 # Arxiv Tool
-arxiv_wrapper = ArxivAPIWrapper(top_k_results=1, doc_content_chars_max=300)
+arxiv_wrapper = ArxivAPIWrapper(top_k_results=1, doc_content_chars_max=500)
 arxiv_tool = ArxivQueryRun(api_wrapper=arxiv_wrapper)
 # DuckDuckGo Search Tool
 search = DuckDuckGoSearchRun(name="Internet Search")
