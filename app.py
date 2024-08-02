@@ -39,8 +39,8 @@ if api_key:
         llm = ChatGroq(model="llama-3.1-70b-versatile", api_key=api_key, streaming=True)
         tools = [wiki_tool, arxiv_tool, search]
 
-        search_agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, handling_parsing_errors=True)
-        
+        search_agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
+                                        agent_kwargs={"handling_parsing_errors":True})
         with st.chat_message("assistant"):
             st_callback = StreamlitCallbackHandler(st.container(), expand_new_thoughts=True)
             response = search_agent.run(st.session_state.messages, callbacks=[st_callback])
