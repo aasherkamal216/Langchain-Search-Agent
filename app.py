@@ -1,11 +1,11 @@
 import os, dotenv
-dotenv.load_dotenv()
 import streamlit as st
 from langchain_groq import ChatGroq
 from langchain_community.utilities import ArxivAPIWrapper, WikipediaAPIWrapper
 from langchain_community.tools import ArxivQueryRun, WikipediaQueryRun, DuckDuckGoSearchRun
 from langchain.agents import initialize_agent, AgentType
 from langchain.callbacks import StreamlitCallbackHandler
+dotenv.load_dotenv()
 
 ## Wikipedia Tool
 wiki_wrapper = WikipediaAPIWrapper(top_k_results=1, doc_content_chars_max=300)
