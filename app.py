@@ -7,7 +7,7 @@ from langchain_community.tools import ArxivQueryRun, WikipediaQueryRun, DuckDuck
 from langchain.agents import initialize_agent, AgentType
 from langchain.callbacks import StreamlitCallbackHandler
 
-# Wikipedia Tool
+## Wikipedia Tool
 wiki_wrapper = WikipediaAPIWrapper(top_k_results=1, doc_content_chars_max=300)
 wiki_tool = WikipediaQueryRun(api_wrapper=wiki_wrapper)
 # Arxiv Tool
