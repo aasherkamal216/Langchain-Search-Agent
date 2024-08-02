@@ -4,7 +4,7 @@ from langchain_groq import ChatGroq
 from langchain_community.utilities import ArxivAPIWrapper, WikipediaAPIWrapper
 from langchain_community.tools import ArxivQueryRun, WikipediaQueryRun, DuckDuckGoSearchRun
 from langchain.agents import initialize_agent, AgentType
-from langchain.callbacks import StreamlitCallbackHandler
+from langchain_community.callbacks.streamlit import StreamlitCallbackHandler
 dotenv.load_dotenv()
 
 ## Wikipedia Tool
@@ -21,7 +21,15 @@ st.set_page_config(page_icon=":mag:", page_title="Tools & Agent")
 st.title(":green[Langchain] Search Agent")
 
 with st.sidebar:
-    api_key = st.text_input("Enter Your Groq API Key:", type="password")
+    with st.popover("Add Groq API Key", use_container_width=True):
+        api_key = st.text_input("Get Your Groq API Key [Here](https://console.groq.com/keys)", type="password")
+    st.divider()
+    st.markdown("<h1 style='text-align: center; font-size: 30px;'>About the App✨</h1>", unsafe_allow_html=True)
+    st.write("""Hi there! This is a langchain search agent app. First, you have to
+             introduce your Groq API key. Then type your question and hit Enter, 
+             the assistant will step by step retrieve the information relevant to
+             your question from Wikipedia, Arxiv and DuckDuckGo Search and then it'll
+             answer your question based on that information.""")
 
 if "messages" not in st.session_state:
     st.session_state["messages"] = [
@@ -41,10 +49,13 @@ if api_key:
 
         search_agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
                                         agent_executor_kwargs={"handle_parsing_errors": True})
-        with st.chat_message("assistant"):
-            st_callback = StreamlitCallbackHandler(st.container(), expand_new_thoughts=True)
-            response = search_agent.run(st.session_state.messages, callbacks=[st_callback])
-            st.write(response)
-        st.session_state.messages.append({"role": "assistant", "content": response})
+        try:
+            with st.chat_message("assistant"):
+                st_callback = StreamlitCallbackHandler(st.container(), expand_new_thoughts=True)
+                response = search_agent.run(st.session_state.messages, callbacks=[st_callback])
+                st.write(response)
+            st.session_state.messages.append({"role": "assistant", "content": response})
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
 else:
-    st.info("Please enter your API Key to proceed")
+    st.info("Please enter your Groq API key in the sidebar to proceed.")
