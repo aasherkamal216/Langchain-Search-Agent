@@ -40,7 +40,7 @@ for message in st.session_state.messages:
     if message["role"] == "user":
         st.chat_message("user", avatar="boss.png").write(message['content'])
     else:
-        st.chat_message("assistant", avatar="robot.png").write(message['content']
+        st.chat_message("assistant", avatar="robot.png").write(message['content'])
     
 if api_key:
     if prompt := st.chat_input("What is Generative AI?"):
