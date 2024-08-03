@@ -37,12 +37,15 @@ if "messages" not in st.session_state:
     ]
 
 for message in st.session_state.messages:
-    st.chat_message(message['role']).write(message['content'])
+    if message["role"] == "user":
+        st.chat_message("user", avatar="boss.png").write(message['content'])
+    else:
+        st.chat_message("assistant", avatar="robot.png").write(message['content']
     
 if api_key:
     if prompt := st.chat_input("What is Generative AI?"):
         st.session_state.messages.append({"role": "user", "content": prompt})
-        st.chat_message("user").write(prompt)
+        st.chat_message("user", avatar="boss.png").write(prompt)
 
         llm = ChatGroq(model="llama-3.1-70b-versatile", api_key=api_key, streaming=True)
         tools = [wiki_tool, arxiv_tool, search]
@@ -50,7 +53,7 @@ if api_key:
         search_agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
                                         agent_executor_kwargs={"handle_parsing_errors": True})
         try:
-            with st.chat_message("assistant"):
+            with st.chat_message("assistant", avatar="robot.png"):
                 st_callback = StreamlitCallbackHandler(st.container(), expand_new_thoughts=True)
                 response = search_agent.run(st.session_state.messages, callbacks=[st_callback])
                 st.write(response)
